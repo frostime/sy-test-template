@@ -19,7 +19,8 @@ export default class PluginTestTemplate extends Plugin {
     }
 
     openTab() {
-        const id = 'test-template'
+        //random string
+        const id = Math.random().toString(36).substring(7);
         this.addTab({
             'type': id,
             init() {
