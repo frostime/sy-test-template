@@ -1,8 +1,8 @@
 {
-  "name": "plugin-sample-vite",
+  "name": "sy-test-template",
   "author": "frostime",
-  "url": "https://github.com/frostime/plugin-sample-vite",
-  "version": "0.3.4",
+  "url": "https://github.com/frostime/sy-test-template",
+  "version": "0.1.0",
   "minAppVersion": "3.0.0",
   "backends": [
     "windows",
@@ -19,12 +19,12 @@
     "desktop-window"
   ],
   "displayName": {
-    "en_US": "Plugin sample with vite",
-    "zh_CN": "插件样例 vite 版"
+    "en_US": "Test Template Syntax",
+    "zh_CN": "测试模板语法"
   },
   "description": {
-    "en_US": "SiYuan plugin sample with vite",
-    "zh_CN": "使用 vite 开发的思源插件样例"
+    "en_US": "Test the built in Golang+Sprig template syntax",
+    "zh_CN": "测试思源内置的 Golang+Sprig 模板语法"
   },
   "readme": {
     "en_US": "README.md",
@@ -36,6 +36,6 @@
     ]
   },
   "keywords": [
-    "plugin", "sample", "插件样例"
+    "模板", "Template"
   ]
 }
