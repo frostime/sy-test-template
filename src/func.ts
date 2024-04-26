@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-04-20 00:45:45
  * @FilePath     : /src/func.ts
- * @LastEditTime : 2024-04-26 10:36:54
+ * @LastEditTime : 2024-04-26 10:40:24
  * @Description  : 
  */
 import { Dialog } from "siyuan";
@@ -49,8 +49,8 @@ const uiTemplate = `
 <section style="display: flex; flex-direction: column; flex: 1; margin: 15px;">
   <div style="display: flex; justify-content: flex-start; margin-bottom: 10px; gap: 10px;">
     <button id="actionregion" class="b3-button" >region</button>
-    <button id="tosprig" class="b3-button" >{{ }}</button>
-    <button id="toaction" class="b3-button" >.action{ }</button>
+    <button id="tosprig" class="b3-button" >To {{ }}</button>
+    <button id="toaction" class="b3-button" >To .action{ }</button>
     <span class="fn__flex-1"></span>
     <button id="render" class="b3-button">Render</button>
   </div>
@@ -72,20 +72,20 @@ export const showDialog = () => {
     enableTabToIndent(original);
 
     dialog.element.querySelector('#actionregion').addEventListener('click', () => {
-        let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
+        // let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
         original.value = preprocessTemplateRegion(original.value);
     })
     dialog.element.querySelector('#tosprig').addEventListener('click', () => {
-        let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
+        // let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
         original.value = toSprig(original.value);
     });
     dialog.element.querySelector('#toaction').addEventListener('click', () => {
-        let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
+        // let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
         original.value = toAction(original.value);
     });
     dialog.element.querySelector('#render').addEventListener('click', async () => {
         let converted = dialog.element.querySelector('#converted') as HTMLTextAreaElement;
-        let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
+        // let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
         let template = toSprig(preprocessTemplateRegion(original.value))
         converted.value = await render(template);
     });
