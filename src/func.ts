@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-04-20 00:45:45
  * @FilePath     : /src/func.ts
- * @LastEditTime : 2024-04-26 19:10:09
+ * @LastEditTime : 2024-04-26 19:25:49
  * @Description  : 
  */
 // import { Dialog } from "siyuan";
@@ -13,12 +13,27 @@ import * as api from "@/api";
 
 // 找到 .action{ .*? } ，转换成 {{ .*? }}
 const toSprig = (template: string) => {
-    return template.replace(/\.action{\s*(.*?)\s*}/g, '{{ $1 }}');
+    // return template.replace(/\.action{\s*(.*?)\s*}/g, '{{ $1 }}');
+    return template.replace(/\.action{\s*(.*?)\s*}/g, (match, p1) => {
+        if (p1.startsWith('/*') && p1.endsWith('*/')) {
+            return `{{${p1}}}`;
+        } else {
+            return `{{ ${p1} }}`;
+        }
+    });
 }
 
 // 找到 {{ .*? }} ，转换成 .action{ .*? }
+// 如果是 {{/*...*/}}，则两边不要添加空格
 const toAction = (template: string) => {
-    return template.replace(/{{\s*(.*?)\s*}}/g, '.action{ $1 }');
+    // return template.replace(/{{\s*(.*?)\s*}}/g, '.action{ $1 }');
+    return template.replace(/{{\s*(.*?)\s*}}/g, (match, p1) => {
+        if (p1.startsWith('/*') && p1.endsWith('*/')) {
+            return `.action{${p1}}`;
+        } else {
+            return `.action{ ${p1} }`;
+        }
+    });
 }
 
 const render = async (sprig: string) => {
@@ -73,6 +88,7 @@ template.innerHTML = uiTemplate;
 export const createElement = (): HTMLElement => {
     const element = template.content.cloneNode(true) as HTMLElement;
     const original = element.querySelector('#original') as HTMLTextAreaElement;
+    const converted = element.querySelector('#converted') as HTMLTextAreaElement;
     // original.value = templateText;
     enableTabToIndent(original);
 
@@ -99,7 +115,6 @@ export const createElement = (): HTMLElement => {
         original.value = toAction(original.value);
     });
     element.querySelector('#render').addEventListener('click', async () => {
-        let converted = element.querySelector('#converted') as HTMLTextAreaElement;
         let template = toSprig(preprocessTemplateRegion(original.value))
         converted.value = await render(template);
     });
