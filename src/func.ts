@@ -3,12 +3,12 @@
  * @Author       : frostime
  * @Date         : 2024-04-20 00:45:45
  * @FilePath     : /src/func.ts
- * @LastEditTime : 2024-04-26 10:24:37
+ * @LastEditTime : 2024-04-26 10:36:54
  * @Description  : 
  */
-import { Dialog, Menu } from "siyuan";
+import { Dialog } from "siyuan";
 
-import type PluginTestTemplate from "@/index";
+import { enableTabToIndent } from "@/libs/indent-textarea";
 import * as api from "@/api";
 
 // 找到 .action{ .*? } ，转换成 {{ .*? }}
@@ -36,7 +36,7 @@ function preprocessTemplateRegion(template: string): string {
     const pattern = /\.startaction(.*?)\.endaction/gs;
 
     // Replace the matched groups
-    return template.replace(pattern, (match, group1) => {
+    return template.replace(pattern, (_, group1: string) => {
         // Split the group into lines and transform each line
         const lines = group1.split('\n').filter(line => line.trim() !== '');
         const transformedLines = lines.map(line => `.action{ ${line.trim()} }`);
@@ -68,6 +68,9 @@ export const showDialog = () => {
         width: "80%",
         height: "80%"
     });
+    const original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
+    enableTabToIndent(original);
+
     dialog.element.querySelector('#actionregion').addEventListener('click', () => {
         let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
         original.value = preprocessTemplateRegion(original.value);
