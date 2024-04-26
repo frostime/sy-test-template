@@ -1,6 +1,7 @@
 ## Usage
 
 1. Input the template text into the left-side textarea.
+  - The left-side textarea supports tab indentation, Shift+Tab unindentation, and Enter for automatic indented newline.
 2. Click the "render" button at the top-right corner.
 3. The rendered result will be shown in the right textarea.
 
