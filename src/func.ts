@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-04-20 00:45:45
  * @FilePath     : /src/func.ts
- * @LastEditTime : 2024-04-26 10:40:24
+ * @LastEditTime : 2024-04-26 11:42:08
  * @Description  : 
  */
 import { Dialog } from "siyuan";
@@ -44,19 +44,23 @@ function preprocessTemplateRegion(template: string): string {
     });
 }
 
+let templateText = '';
+
 //UI, 上面一行按钮，「转换」，「渲染」，下面并列两个框，左边是原始文本，右边是转换后的文本
 const uiTemplate = `
 <section style="display: flex; flex-direction: column; flex: 1; margin: 15px;">
   <div style="display: flex; justify-content: flex-start; margin-bottom: 10px; gap: 10px;">
-    <button id="actionregion" class="b3-button" >region</button>
+    <button id="insertregion" class="b3-button" >Insert Region</button>
+    <span style="display: inline; width: 1px; background-color: var(--b3-border-color);"></span>
     <button id="tosprig" class="b3-button" >To {{ }}</button>
     <button id="toaction" class="b3-button" >To .action{ }</button>
     <span class="fn__flex-1"></span>
+    <button id="translateregion" class="b3-button" >Translate Region</button>
     <button id="render" class="b3-button">Render</button>
   </div>
   <div style="display: flex; flex: 1; gap: 10px;">
-    <textarea class="b3-text-field fn__block" id="original" placeholder="Template" style="flex: 3;font-family: var(--b3-font-family-code); resize: none; font-size: 1.1rem;" spellcheck="false"></textarea>
-    <textarea class="b3-text-field fn__block" id="converted" placeholder="Rendered" style="flex: 2; font-family: var(--b3-font-family-code); resize: none; font-size: 1.1rem;" spellcheck="false"></textarea>
+    <textarea class="b3-text-field fn__block" id="original" placeholder="Template" style="flex: 3;font-family: var(--b3-font-family-code); resize: none; font-size: 20px; line-height: 25px;" spellcheck="false"></textarea>
+    <textarea class="b3-text-field fn__block" id="converted" placeholder="Rendered" style="flex: 2; font-family: var(--b3-font-family-code); resize: none; font-size: 20px; line-height: 25px;" spellcheck="false"></textarea>
   </div>
 </section>
 `;
@@ -65,27 +69,38 @@ export const showDialog = () => {
     let dialog = new Dialog({
         title: 'Test Template',
         content: uiTemplate,
-        width: "80%",
-        height: "80%"
+        width: "70%",
+        height: "70%",
+        destroyCallback: () => {
+            templateText = original.value;
+        }
     });
     const original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
+    original.value = templateText;
     enableTabToIndent(original);
 
-    dialog.element.querySelector('#actionregion').addEventListener('click', () => {
-        // let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
+    dialog.element.querySelector('#insertregion').addEventListener('click', () => {
+        original.value = original.value + '\n.startaction\n\n.endaction';
+        //set cursor
+        original.focus();
+        original.selectionStart = original.value.length - 11;
+        original.selectionEnd = original.value.length - 11;
+    })
+    dialog.element.querySelector('#translateregion').addEventListener('click', () => {
+
         original.value = preprocessTemplateRegion(original.value);
     })
     dialog.element.querySelector('#tosprig').addEventListener('click', () => {
-        // let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
+
         original.value = toSprig(original.value);
     });
     dialog.element.querySelector('#toaction').addEventListener('click', () => {
-        // let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
+
         original.value = toAction(original.value);
     });
     dialog.element.querySelector('#render').addEventListener('click', async () => {
         let converted = dialog.element.querySelector('#converted') as HTMLTextAreaElement;
-        // let original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
+
         let template = toSprig(preprocessTemplateRegion(original.value))
         converted.value = await render(template);
     });
