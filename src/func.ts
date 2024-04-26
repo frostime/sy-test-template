@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-04-20 00:45:45
  * @FilePath     : /src/func.ts
- * @LastEditTime : 2024-04-26 18:58:01
+ * @LastEditTime : 2024-04-26 19:10:09
  * @Description  : 
  */
 // import { Dialog } from "siyuan";
@@ -51,16 +51,19 @@ const uiTemplate = `
 <section style="display: flex; flex-direction: column; flex: 1; padding: 25px;">
   <div style="display: flex; justify-content: flex-start; margin-bottom: 10px; gap: 10px;">
     <button id="insertregion" class="b3-button" >Insert Region</button>
+    <button id="translateregion" class="b3-button" >Translate Region</button>
+    <span style="display: inline; width: 1px; background-color: var(--b3-border-color);"></span>
+    <button id="remove-sprig" class="b3-button" >Remove {{ }}</button>
+    <button id="remove-action" class="b3-button" >Remove .action{ }</button>
     <span style="display: inline; width: 1px; background-color: var(--b3-border-color);"></span>
     <button id="tosprig" class="b3-button" >To {{ }}</button>
     <button id="toaction" class="b3-button" >To .action{ }</button>
     <span class="fn__flex-1"></span>
-    <button id="translateregion" class="b3-button" >Translate Region</button>
     <button id="render" class="b3-button">Render</button>
   </div>
   <div style="display: flex; flex: 1; gap: 10px;">
-    <textarea class="b3-text-field fn__block" id="original" placeholder="Template" style="flex: 3;font-family: var(--b3-font-family-code); resize: none; font-size: 20px; line-height: 25px;" spellcheck="false"></textarea>
-    <textarea class="b3-text-field fn__block" id="converted" placeholder="Rendered" style="flex: 2; font-family: var(--b3-font-family-code); resize: none; font-size: 20px; line-height: 25px;" spellcheck="false"></textarea>
+    <textarea class="b3-text-field fn__block" id="original" placeholder="Template" style="flex: 1;font-family: var(--b3-font-family-code); resize: none; font-size: 20px; line-height: 25px;" spellcheck="false"></textarea>
+    <textarea class="b3-text-field fn__block" id="converted" placeholder="Rendered" style="flex: 1; font-family: var(--b3-font-family-code); resize: none; font-size: 20px; line-height: 25px;" spellcheck="false"></textarea>
   </div>
 </section>
 `;
@@ -80,6 +83,12 @@ export const createElement = (): HTMLElement => {
         original.selectionStart = original.value.length - 11;
         original.selectionEnd = original.value.length - 11;
     })
+    element.querySelector('#remove-sprig').addEventListener('click', () => {
+        original.value = original.value.replace(/{{\s*(.*?)\s*}}/g, '$1');
+    });
+    element.querySelector('#remove-action').addEventListener('click', () => {
+        original.value = original.value.replace(/\.action{\s*(.*?)\s*}/g, '$1');
+    });
     element.querySelector('#translateregion').addEventListener('click', () => {
         original.value = preprocessTemplateRegion(original.value);
     })
