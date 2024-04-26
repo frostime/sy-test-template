@@ -1,8 +1,9 @@
 import {
     Plugin,
+    openTab
 } from "siyuan";
 import "@/index.scss";
-import { showDialog } from "./func";
+import { createElement } from "./func";
 
 
 export default class PluginTestTemplate extends Plugin {
@@ -12,7 +13,26 @@ export default class PluginTestTemplate extends Plugin {
             icon: "iconMarkdown",
             title: this.i18n.name,
             callback: () => {
-                showDialog();
+                this.openTab();
+            }
+        });
+    }
+
+    openTab() {
+        const id = 'test-template'
+        this.addTab({
+            'type': id,
+            init() {
+                this.element.style.display = 'flex';
+                this.element.appendChild(createElement());
+            }
+        });
+        openTab({
+            app: this.app,
+            custom: {
+                title: 'TestTemplate',
+                icon: 'iconMarkdown',
+                id: this.name + id,
             }
         });
     }

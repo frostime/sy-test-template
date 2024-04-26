@@ -3,10 +3,10 @@
  * @Author       : frostime
  * @Date         : 2024-04-20 00:45:45
  * @FilePath     : /src/func.ts
- * @LastEditTime : 2024-04-26 11:42:08
+ * @LastEditTime : 2024-04-26 18:58:01
  * @Description  : 
  */
-import { Dialog } from "siyuan";
+// import { Dialog } from "siyuan";
 
 import { enableTabToIndent } from "@/libs/indent-textarea";
 import * as api from "@/api";
@@ -44,11 +44,11 @@ function preprocessTemplateRegion(template: string): string {
     });
 }
 
-let templateText = '';
+// let templateText = '';
 
 //UI, 上面一行按钮，「转换」，「渲染」，下面并列两个框，左边是原始文本，右边是转换后的文本
 const uiTemplate = `
-<section style="display: flex; flex-direction: column; flex: 1; margin: 15px;">
+<section style="display: flex; flex-direction: column; flex: 1; padding: 25px;">
   <div style="display: flex; justify-content: flex-start; margin-bottom: 10px; gap: 10px;">
     <button id="insertregion" class="b3-button" >Insert Region</button>
     <span style="display: inline; width: 1px; background-color: var(--b3-border-color);"></span>
@@ -64,45 +64,36 @@ const uiTemplate = `
   </div>
 </section>
 `;
+const template = document.createElement('template');
+template.innerHTML = uiTemplate;
 
-export const showDialog = () => {
-    let dialog = new Dialog({
-        title: 'Test Template',
-        content: uiTemplate,
-        width: "70%",
-        height: "70%",
-        destroyCallback: () => {
-            templateText = original.value;
-        }
-    });
-    const original = dialog.element.querySelector('#original') as HTMLTextAreaElement;
-    original.value = templateText;
+export const createElement = (): HTMLElement => {
+    const element = template.content.cloneNode(true) as HTMLElement;
+    const original = element.querySelector('#original') as HTMLTextAreaElement;
+    // original.value = templateText;
     enableTabToIndent(original);
 
-    dialog.element.querySelector('#insertregion').addEventListener('click', () => {
+    element.querySelector('#insertregion').addEventListener('click', () => {
         original.value = original.value + '\n.startaction\n\n.endaction';
         //set cursor
         original.focus();
         original.selectionStart = original.value.length - 11;
         original.selectionEnd = original.value.length - 11;
     })
-    dialog.element.querySelector('#translateregion').addEventListener('click', () => {
-
+    element.querySelector('#translateregion').addEventListener('click', () => {
         original.value = preprocessTemplateRegion(original.value);
     })
-    dialog.element.querySelector('#tosprig').addEventListener('click', () => {
-
+    element.querySelector('#tosprig').addEventListener('click', () => {
         original.value = toSprig(original.value);
     });
-    dialog.element.querySelector('#toaction').addEventListener('click', () => {
-
+    element.querySelector('#toaction').addEventListener('click', () => {
         original.value = toAction(original.value);
     });
-    dialog.element.querySelector('#render').addEventListener('click', async () => {
-        let converted = dialog.element.querySelector('#converted') as HTMLTextAreaElement;
-
+    element.querySelector('#render').addEventListener('click', async () => {
+        let converted = element.querySelector('#converted') as HTMLTextAreaElement;
         let template = toSprig(preprocessTemplateRegion(original.value))
         converted.value = await render(template);
     });
+    return element;
 }
 
