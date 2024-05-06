@@ -45,3 +45,19 @@ add 1 3 | sub 5
 Each line placed within the `.startaction ... .endaction` will be implicitly wrapped with `{{ }}` before rendering.
 
 **Notice**! You cannot use this syntax in SiYuan's template system. Please click the "Translate Region" button at the top-right before you want to apply the template you are testing.
+
+## Button Function Descriptions
+
+![](asset/buttons.png)
+
+- Region Functions
+  - `Insert Region`: Click to insert a `.startaction ... .endaction` region around the cursor (or selected text).
+  - `Translate Region`: Convert the `.startaction ... .endaction` region to `.action{}` template syntax for easy copying and pasting.
+- Remove Functions
+  - `Remove {{}}`: Remove all `{{ }}` decorators.
+  - `Remove .action{}`: Remove all `.action{}` decorators.
+- Format Conversion
+  - `To {{}}`: Convert `.action{}` to `{{ }}` decorators.
+  - `To .action{}`: Convert `{{ }}` to `.action{}` decorators.
+- Render: Render the template text in the left text area to the result in the right text area.
+
