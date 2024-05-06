@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-04-20 00:45:45
  * @FilePath     : /src/func.ts
- * @LastEditTime : 2024-05-06 12:37:32
+ * @LastEditTime : 2024-05-06 12:52:40
  * @Description  : 
  */
 // import { Dialog } from "siyuan";
@@ -14,7 +14,7 @@ import * as api from "@/api";
 // 找到 .action{ .*? } ，转换成 {{ .*? }}
 const toSprig = (template: string) => {
     // return template.replace(/\.action{\s*(.*?)\s*}/g, '{{ $1 }}');
-    return template.replace(/\.action{\s*(.*?)\s*}/g, (match, p1) => {
+    return template.replace(/\.action{\s*(.*?)\s*}/g, (_, p1) => {
         if (p1.startsWith('/*') && p1.endsWith('*/')) {
             return `{{${p1}}}`;
         } else {
@@ -27,7 +27,7 @@ const toSprig = (template: string) => {
 // 如果是 {{/*...*/}}，则两边不要添加空格
 const toAction = (template: string) => {
     // return template.replace(/{{\s*(.*?)\s*}}/g, '.action{ $1 }');
-    return template.replace(/{{\s*(.*?)\s*}}/g, (match, p1) => {
+    return template.replace(/{{\s*(.*?)\s*}}/g, (_, p1) => {
         if (p1.startsWith('/*') && p1.endsWith('*/')) {
             return `.action{${p1}}`;
         } else {
@@ -100,11 +100,24 @@ export const createElement = (): HTMLElement => {
     enableTabToIndent(original);
 
     element.querySelector('#insertregion').addEventListener('click', () => {
-        original.value = original.value + '\n.startaction\n\n.endaction';
-        //set cursor
+        const startPos = original.selectionStart;
+        const endPos = original.selectionEnd;
+        const beforeText = original.value.substring(0, startPos);
+        const selectedText = original.value.substring(startPos, endPos);
+        const afterText = original.value.substring(endPos);
+        const newValue = [
+            beforeText,
+            beforeText === '' ? '' : '\n',
+            '.startaction\n',
+            selectedText,
+            '\n.endaction',
+            afterText === '' ? '' : '\n',
+            afterText
+        ];
+        original.value = newValue.join('');
+        original.selectionStart = newValue.slice(0, 3).join('').length;
+        original.selectionEnd = original.selectionStart;
         original.focus();
-        original.selectionStart = original.value.length - 11;
-        original.selectionEnd = original.value.length - 11;
     })
     element.querySelector('#remove-sprig').addEventListener('click', () => {
         original.value = original.value.replace(/{{\s*(.*?)\s*}}/g, '$1');
