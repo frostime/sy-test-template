@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-04-20 00:45:45
  * @FilePath     : /src/func.ts
- * @LastEditTime : 2024-04-26 19:25:49
+ * @LastEditTime : 2024-05-06 12:37:32
  * @Description  : 
  */
 // import { Dialog } from "siyuan";
@@ -54,7 +54,14 @@ function preprocessTemplateRegion(template: string): string {
     return template.replace(pattern, (_, group1: string) => {
         // Split the group into lines and transform each line
         const lines = group1.split('\n').filter(line => line.trim() !== '');
-        const transformedLines = lines.map(line => `.action{ ${line.trim()} }`);
+        const transformedLines = lines.map(line => {
+            line = line.trim();
+            if (line.startsWith('/*') && line.endsWith('*/')) {
+                return `.action{${line.trim()}}`;
+            } else {
+                return `.action{ ${line} }`;
+            }
+        });
         return transformedLines.join('\n');
     });
 }
