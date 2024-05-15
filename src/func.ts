@@ -3,7 +3,7 @@
  * @Author       : frostime
  * @Date         : 2024-04-20 00:45:45
  * @FilePath     : /src/func.ts
- * @LastEditTime : 2024-05-06 12:52:40
+ * @LastEditTime : 2024-05-15 12:22:33
  * @Description  : 
  */
 // import { Dialog } from "siyuan";
@@ -82,6 +82,9 @@ const uiTemplate = `
     <button id="toaction" class="b3-button" >To .action{ }</button>
     <span class="fn__flex-1"></span>
     <button id="render" class="b3-button">Render</button>
+    <button id="toggleVisible" class="ariaLabel toolbar__item" aria-label="Hide/Show">
+        <svg><use xlink:href="#iconRight"></use></svg>
+    </button>
   </div>
   <div style="display: flex; flex: 1; gap: 10px;">
     <textarea class="b3-text-field fn__block" id="original" placeholder="Template" style="flex: 1;font-family: var(--b3-font-family-code); resize: none; font-size: 20px; line-height: 25px;" spellcheck="false"></textarea>
@@ -138,6 +141,13 @@ export const createElement = (): HTMLElement => {
         let template = toSprig(preprocessTemplateRegion(original.value))
         converted.value = await render(template);
     });
+    element.querySelector('#toggleVisible').addEventListener('click', (e) => {
+        let btn = e.target as HTMLButtonElement;
+        const visible = converted.style.display === 'none';
+        converted.style.display = visible ? 'block' : 'none';
+        btn.querySelector('svg use').setAttribute('xlink:href', visible ? '#iconRight' : '#iconLeft');
+    });
+
     return element;
 }
 
