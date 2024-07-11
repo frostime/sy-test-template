@@ -2,21 +2,13 @@
   "name": "sy-test-template",
   "author": "frostime",
   "url": "https://github.com/frostime/sy-test-template",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "minAppVersion": "3.0.0",
   "backends": [
-    "windows",
-    "linux",
-    "darwin",
-    "ios",
-    "android"
+    "all"
   ],
   "frontends": [
-    "desktop",
-    "mobile",
-    "browser-desktop",
-    "browser-mobile",
-    "desktop-window"
+    "all"
   ],
   "displayName": {
     "en_US": "Test Template Syntax",
