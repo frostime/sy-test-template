@@ -13,8 +13,8 @@ import * as api from "@/api";
 
 // 找到 .action{ .*? } ，转换成 {{ .*? }}
 const toSprig = (template: string) => {
-    // return template.replace(/\.action{\s*(.*?)\s*}/g, '{{ $1 }}');
-    return template.replace(/\.action{\s*(.*?)\s*}/g, (_, p1) => {
+    // Use non-greedy matching and handle nested braces
+    return template.replace(/\.action{\s*((?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\s*}/g, (_, p1) => {
         if (p1.startsWith('/*') && p1.endsWith('*/')) {
             return `{{${p1}}}`;
         } else {
@@ -26,8 +26,8 @@ const toSprig = (template: string) => {
 // 找到 {{ .*? }} ，转换成 .action{ .*? }
 // 如果是 {{/*...*/}}，则两边不要添加空格
 const toAction = (template: string) => {
-    // return template.replace(/{{\s*(.*?)\s*}}/g, '.action{ $1 }');
-    return template.replace(/{{\s*(.*?)\s*}}/g, (_, p1) => {
+    // Use non-greedy matching and handle nested braces
+    return template.replace(/{{\s*((?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*)\s*}}/g, (_, p1) => {
         if (p1.startsWith('/*') && p1.endsWith('*/')) {
             return `.action{${p1}}`;
         } else {
@@ -150,4 +150,3 @@ export const createElement = (): HTMLElement => {
 
     return element;
 }
-

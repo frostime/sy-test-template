@@ -2,7 +2,7 @@
   "name": "sy-test-template",
   "author": "frostime",
   "url": "https://github.com/frostime/sy-test-template",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "minAppVersion": "3.0.0",
   "backends": [
     "all"
@@ -28,6 +28,7 @@
     ]
   },
   "keywords": [
-    "模板", "Template"
+    "模板",
+    "Template"
   ]
 }
